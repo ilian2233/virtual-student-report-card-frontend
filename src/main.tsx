@@ -6,16 +6,23 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import App from "./App";
-import ErrorPage from "./error-page";
-import {Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+import ErrorPage from "./Error-page";
+import {StudentExams, TeacherExams} from "./Exams";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
-        errorElement: <ErrorPage />,
-
+        errorElement: <ErrorPage/>,
     },
+    {
+        path: "/student/exams",
+        element: <StudentExams/>,
+    },
+    {
+        path: "/teacher/exams",
+        element: <TeacherExams/>,
+    }
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
