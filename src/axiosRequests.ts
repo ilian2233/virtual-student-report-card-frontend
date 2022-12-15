@@ -7,6 +7,7 @@ import moment from "moment";
 
 const baseURL = "http://localhost:8080";
 
+
 export const login = (email: string, password: string, setCookie: (name: string, value: any, options?: (CookieSetOptions)) => void) => {
     axios.post(baseURL+"/login", {Email: email, Password: password},)
         .then((r) => setCookie("token", r.data.Token, {expires: moment(new Date()).add(30, 'm').toDate()}))
@@ -66,7 +67,7 @@ export const getCourses = (setCourses:  React.Dispatch<React.SetStateAction<stri
         });
 };
 
-export const  saveExam = (courseName: string, studentEmail: string, points: number, token: string) => {
+export const saveExam = (courseName: string, studentEmail: string, points: number, token: string) => {
 
     const config = {
         headers:{
@@ -76,6 +77,23 @@ export const  saveExam = (courseName: string, studentEmail: string, points: numb
 
     axios.post(baseURL+"/teacher/exams", {CourseName: courseName, StudentEmail: studentEmail, Points: points}, config)
         .then((response: { data: string[] }) => {
+            console.log("Success");
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const saveStudent = (name: string, email: string, phone: string, token: string) => {
+
+    const config = {
+        headers:{
+            Authorization: token,
+        }
+    };
+
+    axios.post(baseURL+"/admin/students", {Name: name, Email: email, Phone: phone}, config)
+        .then(() => {
             console.log("Success");
         })
         .catch(error => {
