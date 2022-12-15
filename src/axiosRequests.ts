@@ -4,6 +4,7 @@ import {exam} from "./Exams";
 import {useCookies} from "react-cookie";
 import {CookieSetOptions} from "universal-cookie";
 import moment from "moment";
+import {roles} from "./User";
 
 const baseURL = "http://localhost:8080";
 
@@ -84,7 +85,20 @@ export const saveExam = (courseName: string, studentEmail: string, points: numbe
         });
 }
 
-export const saveStudent = (name: string, email: string, phone: string, token: string) => {
+export const saveUser = (name: string, email: string, phone: string, token: string, role: roles) => {
+
+    let slug = ""
+    switch (role){
+        case "student":
+            slug = "/admin/students"
+            break
+        case "teacher":
+            slug = "/admin/teachers"
+            break
+        case "admin":
+            slug = "/admin/admins"
+            break
+    }
 
     const config = {
         headers:{
@@ -92,7 +106,7 @@ export const saveStudent = (name: string, email: string, phone: string, token: s
         }
     };
 
-    axios.post(baseURL+"/admin/students", {Name: name, Email: email, Phone: phone}, config)
+    axios.post(baseURL+slug, {Name: name, Email: email, Phone: phone}, config)
         .then(() => {
             console.log("Success");
         })

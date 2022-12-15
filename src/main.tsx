@@ -10,7 +10,7 @@ import ErrorPage from "./Error-page";
 import {GetStudentExams, CreateExams} from "./Exams";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
-import {CreateStudent} from "./Student";
+import {CreateUser} from "./User";
 
 const router = createBrowserRouter([
     {
@@ -32,7 +32,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin/students",
-        element: <CreateStudent/>,
+        element: <CreateUser role="student"/>,
+    },
+    {
+        path: "/admin/teachers",
+        element: <CreateUser role="teacher"/>,
     }
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

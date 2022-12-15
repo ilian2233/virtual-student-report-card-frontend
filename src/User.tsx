@@ -1,9 +1,11 @@
 import {useCookies} from "react-cookie";
 import React from "react";
-import {saveStudent} from "./axiosRequests";
+import {saveUser} from "./axiosRequests";
 import {Button, Grid, TextField} from "@mui/material";
 
-export const CreateStudent = () => {
+export type roles = "student"|"teacher"|"admin"
+
+export const CreateUser = (props:{ role: roles}) => {
     const [cookies] = useCookies();
 
     const [name, setName] = React.useState<string>("");
@@ -13,7 +15,7 @@ export const CreateStudent = () => {
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
-        saveStudent(name, email, phone, cookies["token"])
+        saveUser(name, email, phone, cookies["token"], props.role)
     }
 
     return <Grid container alignItems="center" direction="column">
