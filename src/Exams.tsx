@@ -20,13 +20,13 @@ export type exam = {
     Points :number;
 }
 
-export const StudentExams = () => {
+export const GetStudentExams = () => {
     const [cookies] = useCookies();
 
     const [exams, setExams] = React.useState<exam[]>([]);
 
     React.useEffect(() => {
-        getExams(setExams, cookies.get("token"))
+        getExams(setExams, cookies["token"])
     }, []);
 
     console.log(exams)
@@ -60,7 +60,7 @@ export const StudentExams = () => {
 }
 
 //TODO: Add clear form after submit checkbox
-export const TeacherExams = () => {
+export const CreateExams = () => {
     const [cookies] = useCookies();
 
     const [courseName, setCourseName] = React.useState<string>("");
@@ -83,7 +83,7 @@ export const TeacherExams = () => {
     return (studentEmailsList.length <1 || courseList.length <1)?
         <CircularProgress />:
         <form onSubmit={handleSubmit}>
-        <Grid container alignItems="center" justify="center" direction="column">
+        <Grid container alignItems="center" direction="column">
             <Grid item>
                 <Autocomplete
                     disablePortal

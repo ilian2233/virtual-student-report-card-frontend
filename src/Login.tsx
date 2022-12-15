@@ -29,10 +29,10 @@ export const Login = () => {
         variant="outlined"
     >
         <div>
-            <Typography level="h4" component="h1">
+            <Typography component="h1">
                 <b>Welcome!</b>
             </Typography>
-            <Typography level="body2">Sign in to continue.</Typography>
+            <Typography>Sign in to continue.</Typography>
         </div>
         <TextField
             name="email"

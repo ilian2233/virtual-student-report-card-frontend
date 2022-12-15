@@ -7,9 +7,10 @@ import {
 } from "react-router-dom";
 import App from "./App";
 import ErrorPage from "./Error-page";
-import {StudentExams, TeacherExams} from "./Exams";
+import {GetStudentExams, CreateExams} from "./Exams";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
+import {CreateStudent} from "./Student";
 
 const router = createBrowserRouter([
     {
@@ -23,11 +24,15 @@ const router = createBrowserRouter([
     },
     {
         path: "/student/exams",
-        element: <StudentExams/>,
+        element: <GetStudentExams/>,
     },
     {
         path: "/teacher/exams",
-        element: <TeacherExams/>,
+        element: <CreateExams/>,
+    },
+    {
+        path: "/admin/students",
+        element: <CreateStudent/>,
     }
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
