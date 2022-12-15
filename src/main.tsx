@@ -8,12 +8,18 @@ import {
 import App from "./App";
 import ErrorPage from "./Error-page";
 import {StudentExams, TeacherExams} from "./Exams";
+import {Login} from "./Login";
+import {CookiesProvider} from "react-cookie";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
         errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/login",
+        element: <Login/>,
     },
     {
         path: "/student/exams",
@@ -26,6 +32,8 @@ const router = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <CookiesProvider>
+          <RouterProvider router={router} />
+      </CookiesProvider>
   </React.StrictMode>,
 )

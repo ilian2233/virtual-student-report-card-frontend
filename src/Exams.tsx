@@ -12,6 +12,7 @@ import {
     TableRow, TextField
 } from "@mui/material";
 import {getCourses, getExams, getStudentEmails, saveExam} from "./axiosRequests";
+import {useCookies} from "react-cookie";
 
 export type exam = {
     StudentName: string;
@@ -20,11 +21,12 @@ export type exam = {
 }
 
 export const StudentExams = () => {
+    const [cookies] = useCookies();
 
     const [exams, setExams] = React.useState<exam[]>([]);
 
     React.useEffect(() => {
-        getExams(setExams)
+        getExams(setExams, cookies.get("token"))
     }, []);
 
     console.log(exams)
@@ -59,21 +61,23 @@ export const StudentExams = () => {
 
 //TODO: Add clear form after submit checkbox
 export const TeacherExams = () => {
-    const [examCourseName, setExamCourseName] = React.useState<string>("");
-    const [examStudentEmail, setExamStudentEmail] = React.useState<string>("");
-    const [examPoints, setExamPoints] = React.useState<number>(0);
+    const [cookies] = useCookies();
+
+    const [courseName, setCourseName] = React.useState<string>("");
+    const [studentEmail, setStudentEmail] = React.useState<string>("");
+    const [points, setPoints] = React.useState<number>(0);
 
     const [studentEmailsList, setStudentEmailsList] = React.useState<string[]>([]);
     const [courseList, setCourseList] = React.useState<string[]>([]);
     React.useEffect(() => {
-        getStudentEmails(setStudentEmailsList)
-        getCourses(setCourseList)
+        getStudentEmails(setStudentEmailsList, cookies.get("token"))
+        getCourses(setCourseList, cookies.get("token"))
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
-        saveExam(examCourseName, examStudentEmail, examPoints)
+        saveExam(courseName, studentEmail, points, cookies.get("token"))
     }
 
     return (studentEmailsList.length <1 || courseList.length <1)?
@@ -86,9 +90,9 @@ export const TeacherExams = () => {
                     id="combo-box-demo"
                     options={studentEmailsList}
                     sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} error={(examStudentEmail=="")} label="Student email" />}
-                    inputValue={examStudentEmail}
-                    onInputChange={(_, newInputValue) => setExamStudentEmail(newInputValue)}
+                    renderInput={(params) => <TextField {...params} error={(studentEmail=="")} label="Student email" />}
+                    inputValue={studentEmail}
+                    onInputChange={(_, newInputValue) => setStudentEmail(newInputValue)}
                 />
             </Grid>
             <Grid item>
@@ -97,20 +101,20 @@ export const TeacherExams = () => {
                     id="combo-box-demo"
                     options={courseList}
                     sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} error={(examCourseName=="")} label="Course" />}
-                    inputValue={examCourseName}
-                    onInputChange={(_, newInputValue) => setExamCourseName(newInputValue)}
+                    renderInput={(params) => <TextField {...params} error={(courseName=="")} label="Course" />}
+                    inputValue={courseName}
+                    onInputChange={(_, newInputValue) => setCourseName(newInputValue)}
                 />
             </Grid>
             <Grid item>
                 <TextField
-                    error={(examPoints > 100 || examPoints < 0)}
+                    error={(points > 100 || points < 0)}
                     id="points"
                     name="points"
                     label="Points"
                     type="number"
-                    value={examPoints}
-                    onChange={ (e) => setExamPoints(parseInt(e.target.value))}
+                    value={points}
+                    onChange={ (e) => setPoints(parseInt(e.target.value))}
                 />
             </Grid>
             <Button variant="contained" color="primary" type="submit">

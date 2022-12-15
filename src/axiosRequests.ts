@@ -1,16 +1,25 @@
 import React from "react";
 import axios from "axios";
 import {exam} from "./Exams";
+import {useCookies} from "react-cookie";
+import {CookieSetOptions} from "universal-cookie";
+import moment from "moment";
 
 const baseURL = "http://localhost:8080";
-const TOKEN_STUDENT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiZXhwIjoxNjczNjM1MTczLCJyb2xlcyI6WyJTdHVkZW50Il19.yWekp2YbBhS6DhmX_zFnFD1Z6bgEkTIXugiitxTI7YA"
-const TOKEN_TEACHER="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiZXhwIjoxNjczNjM1MjIzLCJyb2xlcyI6WyJUZWFjaGVyIl19.NIm04srRBeS4uYVD5m87qgQQEXY2ifELJqoj6rPr3GM"
 
-export const getExams = (setExams:  React.Dispatch<React.SetStateAction<exam[]>>) => {
+export const login = (email: string, password: string, setCookie: (name: string, value: any, options?: (CookieSetOptions)) => void) => {
+    axios.post(baseURL+"/login", {Email: email, Password: password},)
+        .then((r) => setCookie("token", r.data.Token, {expires: moment(new Date()).add(30, 'm').toDate()}))
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const getExams = (setExams:  React.Dispatch<React.SetStateAction<exam[]>>, token: string) => {
 
     const config = {
         headers:{
-            Authorization: TOKEN_STUDENT,
+            Authorization: token,
         }
     };
 
@@ -23,11 +32,11 @@ export const getExams = (setExams:  React.Dispatch<React.SetStateAction<exam[]>>
     });
 };
 
-export const getStudentEmails = (setStudents:  React.Dispatch<React.SetStateAction<string[]>>) => {
+export const getStudentEmails = (setStudents:  React.Dispatch<React.SetStateAction<string[]>>, token: string) => {
 
     const config = {
         headers:{
-            Authorization: TOKEN_TEACHER,
+            Authorization: token,
         }
     };
 
@@ -40,11 +49,11 @@ export const getStudentEmails = (setStudents:  React.Dispatch<React.SetStateActi
         });
 };
 
-export const getCourses = (setCourses:  React.Dispatch<React.SetStateAction<string[]>>) => {
+export const getCourses = (setCourses:  React.Dispatch<React.SetStateAction<string[]>>, token: string) => {
 
     const config = {
         headers:{
-            Authorization: TOKEN_TEACHER,
+            Authorization: token,
         }
     };
 
@@ -57,15 +66,15 @@ export const getCourses = (setCourses:  React.Dispatch<React.SetStateAction<stri
         });
 };
 
-export const  saveExam = (examCourseName: string, examStudentEmail: string, examPoints: number) => {
+export const  saveExam = (courseName: string, studentEmail: string, points: number, token: string) => {
 
     const config = {
         headers:{
-            Authorization: TOKEN_TEACHER,
+            Authorization: token,
         }
     };
 
-    axios.post(baseURL+"/teacher/exams", {CourseName: examCourseName, StudentEmail: examStudentEmail, Points: examPoints},config)
+    axios.post(baseURL+"/teacher/exams", {CourseName: courseName, StudentEmail: studentEmail, Points: points}, config)
         .then((response: { data: string[] }) => {
             console.log("Success");
         })
