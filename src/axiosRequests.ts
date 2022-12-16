@@ -5,6 +5,7 @@ import {useCookies} from "react-cookie";
 import {CookieSetOptions} from "universal-cookie";
 import moment from "moment";
 import {roles} from "./User";
+import {teacher} from "./Course";
 
 const baseURL = "http://localhost:8080";
 
@@ -108,6 +109,40 @@ export const saveUser = (name: string, email: string, phone: string, token: stri
 
     axios.post(baseURL+slug, {Name: name, Email: email, Phone: phone}, config)
         .then(() => {
+            console.log("Success");
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const getTeachers = (setTeachers:  React.Dispatch<React.SetStateAction<string[]>>, token: string) => {
+
+    const config = {
+        headers:{
+            Authorization: token,
+        }
+    };
+
+    axios.get(baseURL+"/admin/teachers",config)
+        .then((response: { data: string[] }) => {
+            setTeachers(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+};
+
+export const saveCourse = (courseName: string, teacherEmail: string, token: string) => {
+
+    const config = {
+        headers:{
+            Authorization: token,
+        }
+    };
+
+    axios.post(baseURL+"/admin/courses", {CourseName: courseName, TeacherEmail: teacherEmail}, config)
+        .then((response: { data: string[] }) => {
             console.log("Success");
         })
         .catch(error => {

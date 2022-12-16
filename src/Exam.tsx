@@ -70,19 +70,18 @@ export const CreateExams = () => {
     const [studentEmailsList, setStudentEmailsList] = React.useState<string[]>([]);
     const [courseList, setCourseList] = React.useState<string[]>([]);
     React.useEffect(() => {
-        getStudentEmails(setStudentEmailsList, cookies.get("token"))
-        getCourses(setCourseList, cookies.get("token"))
+        getStudentEmails(setStudentEmailsList, cookies["token"])
+        getCourses(setCourseList, cookies["token"])
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
-        saveExam(courseName, studentEmail, points, cookies.get("token"))
+        saveExam(courseName, studentEmail, points, cookies["token"])
     }
 
     return (studentEmailsList.length <1 || courseList.length <1)?
         <CircularProgress />:
-        <form onSubmit={handleSubmit}>
         <Grid container alignItems="center" direction="column">
             <Grid item>
                 <Autocomplete
@@ -117,9 +116,8 @@ export const CreateExams = () => {
                     onChange={ (e) => setPoints(parseInt(e.target.value))}
                 />
             </Grid>
-            <Button variant="contained" color="primary" type="submit">
+            <Button onClick={handleSubmit}>
                 Submit
             </Button>
-        </Grid>
-    </form>;
+        </Grid>;
 }
