@@ -4,6 +4,9 @@ import {saveUser} from "./axiosRequests";
 import {Button, Grid, TextField} from "@mui/material";
 
 export type roles = "student"|"teacher"|"admin"
+export const nameRegex = /^([a-zA-Z]\s?)*$/
+export const emailRegex = /^(\S+@\S+\.\S+)?$/
+export const phoneRegex = /^(\d{10})?$/
 
 export const CreateUser = (props:{ role: roles}) => {
     const [cookies] = useCookies();
@@ -21,6 +24,7 @@ export const CreateUser = (props:{ role: roles}) => {
     return <Grid container alignItems="center" direction="column">
                 <Grid item>
                     <TextField
+                        error={!nameRegex.test(name)}
                         name="Name"
                         type="name"
                         placeholder="Ivan"
@@ -31,6 +35,7 @@ export const CreateUser = (props:{ role: roles}) => {
                 </Grid>
                 <Grid item>
                     <TextField
+                        error={!emailRegex.test(email)}
                         name="Email"
                         type="email"
                         placeholder="johndoe@email.com"
@@ -41,6 +46,7 @@ export const CreateUser = (props:{ role: roles}) => {
                 </Grid>
                 <Grid item>
                     <TextField
+                        error={!phoneRegex.test(phone)}
                         name="Phone"
                         type="phone"
                         placeholder="0881234567"

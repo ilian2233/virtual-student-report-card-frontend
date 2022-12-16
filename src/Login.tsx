@@ -2,6 +2,9 @@ import React from "react";
 import {Button, Paper, TextField, Typography} from "@mui/material";
 import {login} from "./axiosRequests";
 import {useCookies} from "react-cookie";
+import {emailRegex} from "./User";
+
+export const passwordRegex = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/
 
 export const Login = () => {
     const [_, setCookie] = useCookies();
@@ -35,6 +38,7 @@ export const Login = () => {
             <Typography>Sign in to continue.</Typography>
         </div>
         <TextField
+            error={!emailRegex.test(email)}
             name="email"
             type="email"
             placeholder="johndoe@email.com"
@@ -43,6 +47,7 @@ export const Login = () => {
             onChange={ (e) => setEmail(e.target.value)}
         />
         <TextField
+            error={!passwordRegex.test(password)}
             name="password"
             type="password"
             placeholder="password"
