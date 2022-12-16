@@ -2,6 +2,7 @@ import {Autocomplete, Button, CircularProgress, Grid, TextField} from "@mui/mate
 import {getTeachers, saveCourse} from "./axiosRequests";
 import React from "react";
 import {useCookies} from "react-cookie";
+import {nameRegex} from "./User";
 
 export type course = {
     TeacherEmail: string;
@@ -40,7 +41,7 @@ export const CreateCourse = () => {
             </Grid>
             <Grid item>
                 <TextField
-                    error={courseName == ""}
+                    error={!nameRegex.test(courseName)}
                     name="CourseName"
                     type="courseName"
                     placeholder="Math"

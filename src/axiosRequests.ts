@@ -1,11 +1,9 @@
 import React from "react";
 import axios from "axios";
-import {exam} from "./Exams";
-import {useCookies} from "react-cookie";
+import {exam} from "./Exam";
 import {CookieSetOptions} from "universal-cookie";
 import moment from "moment";
 import {roles} from "./User";
-import {teacher} from "./Course";
 
 const baseURL = "http://localhost:8080";
 
@@ -78,7 +76,7 @@ export const saveExam = (courseName: string, studentEmail: string, points: numbe
     };
 
     axios.post(baseURL+"/teacher/exams", {CourseName: courseName, StudentEmail: studentEmail, Points: points}, config)
-        .then((response: { data: string[] }) => {
+        .then(() => {
             console.log("Success");
         })
         .catch(error => {
@@ -142,7 +140,7 @@ export const saveCourse = (courseName: string, teacherEmail: string, token: stri
     };
 
     axios.post(baseURL+"/admin/courses", {CourseName: courseName, TeacherEmail: teacherEmail}, config)
-        .then((response: { data: string[] }) => {
+        .then(() => {
             console.log("Success");
         })
         .catch(error => {
