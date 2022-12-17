@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import {getCourses, getExams, getStudentEmails, saveExam} from "./axiosRequests";
 import {useCookies} from "react-cookie";
+import {requestResult} from "./main";
+import {useSnackbar} from "notistack";
 
 export type exam = {
     StudentName: string;
@@ -22,11 +24,12 @@ export type exam = {
 
 export const GetStudentExams = () => {
     const [cookies] = useCookies();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [exams, setExams] = React.useState<exam[]>([]);
 
     React.useEffect(() => {
-        getExams(setExams, cookies["token"])
+        getExams(setExams, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     console.log(exams)
@@ -62,6 +65,7 @@ export const GetStudentExams = () => {
 //TODO: Add clear form after submit checkbox
 export const CreateExams = () => {
     const [cookies] = useCookies();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [courseName, setCourseName] = React.useState<string>("");
     const [studentEmail, setStudentEmail] = React.useState<string>("");
@@ -70,14 +74,14 @@ export const CreateExams = () => {
     const [studentEmailsList, setStudentEmailsList] = React.useState<string[]>([]);
     const [courseList, setCourseList] = React.useState<string[]>([]);
     React.useEffect(() => {
-        getStudentEmails(setStudentEmailsList, cookies["token"])
-        getCourses(setCourseList, cookies["token"])
+        getStudentEmails(setStudentEmailsList, cookies["token"], requestResult(enqueueSnackbar))
+        getCourses(setCourseList, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
-        saveExam(courseName, studentEmail, points, cookies["token"])
+        saveExam(courseName, studentEmail, points, cookies["token"], requestResult(enqueueSnackbar))
     }
 
     return (studentEmailsList.length <1 || courseList.length <1)?

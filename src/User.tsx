@@ -2,6 +2,8 @@ import {useCookies} from "react-cookie";
 import React from "react";
 import {saveUser} from "./axiosRequests";
 import {Button, Grid, TextField} from "@mui/material";
+import {useSnackbar} from "notistack";
+import {requestResult} from "./main";
 
 export type roles = "student"|"teacher"|"admin"
 export const nameRegex = /^([a-zA-Z]\s?)*$/
@@ -10,6 +12,7 @@ export const phoneRegex = /^(\d{10})?$/
 
 export const CreateUser = (props:{ role: roles}) => {
     const [cookies] = useCookies();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [name, setName] = React.useState<string>("");
     const [email, setEmail] = React.useState<string>("");
@@ -17,8 +20,7 @@ export const CreateUser = (props:{ role: roles}) => {
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-
-        saveUser(name, email, phone, cookies["token"], props.role)
+        saveUser(name, email, phone, cookies["token"], props.role, requestResult(enqueueSnackbar))
     }
 
     return <Grid container alignItems="center" direction="column">

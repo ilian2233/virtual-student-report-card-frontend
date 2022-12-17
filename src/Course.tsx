@@ -3,6 +3,8 @@ import {getTeachers, saveCourse} from "./axiosRequests";
 import React from "react";
 import {useCookies} from "react-cookie";
 import {nameRegex} from "./User";
+import {useSnackbar} from "notistack";
+import {requestResult} from "./main";
 
 export type course = {
     TeacherEmail: string;
@@ -11,18 +13,19 @@ export type course = {
 
 export const CreateCourse = () => {
     const [cookies] = useCookies();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [teacherEmail, setTeacherEmail] = React.useState<string>("");
     const [courseName, setCourseName] = React.useState<string>("");
 
     const [teachers, setTeachers] = React.useState<string[]>([]);
     React.useEffect(() => {
-        getTeachers(setTeachers, cookies["token"])
+        getTeachers(setTeachers, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        saveCourse(courseName, teacherEmail, cookies["token"])
+        saveCourse(courseName, teacherEmail, cookies["token"], requestResult(enqueueSnackbar))
     }
 
     return teachers.length <1?

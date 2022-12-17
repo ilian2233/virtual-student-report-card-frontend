@@ -3,17 +3,20 @@ import {Button, Paper, TextField, Typography} from "@mui/material";
 import {login} from "./axiosRequests";
 import {useCookies} from "react-cookie";
 import {emailRegex} from "./User";
+import {requestResult} from "./main";
+import {useSnackbar} from "notistack";
 
 export const passwordRegex = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/
 
 export const Login = () => {
     const [_, setCookie] = useCookies();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [password, setPassword] = React.useState<string>("test_pas_123");
     const [email, setEmail] = React.useState<string>("test@test.com");
 
     const handleSubmit = () => {
-        login(email, password, setCookie)
+        login(email, password, setCookie, requestResult(enqueueSnackbar))
     }
 
     return <Paper
