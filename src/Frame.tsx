@@ -17,16 +17,23 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LinkIcon from '@mui/icons-material/Link';
+<<<<<<< HEAD
 import {useNavigate} from "react-router-dom";
 import {Link} from "@mui/material";
 import { Link as RouterLink } from 'react-router-dom';
+=======
+>>>>>>> d7e00db (Removed Error handling file)
 
 const drawerWidth = 240;
 
 const LinksBlock = (props: { names: {text: string, route: string}[] }) =>  <>
         <Divider/>
         <List>
+<<<<<<< HEAD
             {props.names.map((v, index) => (
+=======
+            {props.names.map((v) => (
+>>>>>>> d7e00db (Removed Error handling file)
                 <ListItem key={v.text} disablePadding>
                     <a href={v.route}>
                         <ListItemButton>
@@ -90,7 +97,11 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
 }));
 
+<<<<<<< HEAD
 export default function PersistentDrawerLeft(props: { children: any; }) {
+=======
+export default function PersistentDrawerLeft() {
+>>>>>>> d7e00db (Removed Error handling file)
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -153,7 +164,10 @@ export default function PersistentDrawerLeft(props: { children: any; }) {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader/>
+<<<<<<< HEAD
                 {props.children}
+=======
+>>>>>>> d7e00db (Removed Error handling file)
             </Main>
         </Box>
     );

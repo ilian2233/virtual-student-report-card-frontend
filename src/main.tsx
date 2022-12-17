@@ -51,8 +51,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <CookiesProvider>
           <RouterProvider router={router} />
           <BrowserRouter>
+<<<<<<< HEAD
           <PersistentDrawerLeft>
           </PersistentDrawerLeft>
+=======
+              <PersistentDrawerLeft/>
+>>>>>>> d7e00db (Removed Error handling file)
           </BrowserRouter>
       </CookiesProvider>
   </React.StrictMode>,
