@@ -5,7 +5,6 @@ import {
     BrowserRouter,
     createBrowserRouter,
     RouterProvider,
-    Navigate,
 } from "react-router-dom";
 import App from "./App";
 import {GetStudentExams, CreateExams} from "./Exam";
@@ -14,46 +13,66 @@ import {CookiesProvider} from "react-cookie";
 import {CreateUser} from "./User";
 import {CreateCourse} from "./Course";
 import PersistentDrawerLeft from "./Frame";
+import {OptionsObject, SnackbarKey, SnackbarMessage, SnackbarProvider} from "notistack";
+import {AxiosPromise} from "axios";
+import ErrorPage from "./Error-page";
+
+export const requestResult = (alertHandler:  (message: SnackbarMessage, options?: (OptionsObject | undefined)) => SnackbarKey) => (request: Promise<AxiosPromise>) => request
+    .then(r=>{
+        alertHandler("Success", {variant: "success"})
+        return r
+    })
+    .catch(e=>{
+        alertHandler("Request failed", {variant: "error"})
+        return e
+    })
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
-        errorElement: <Navigate to="/login" replace={true} />,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/login",
         element: <Login/>,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/student/exams",
         element: <GetStudentExams/>,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/teacher/exams",
         element: <CreateExams/>,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/admin/students",
         element: <CreateUser role="student"/>,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/admin/teachers",
         element: <CreateUser role="teacher"/>,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/admin/courses",
         element: <CreateCourse/>,
+        errorElement: <ErrorPage/>,
     }
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
       <CookiesProvider>
-          <RouterProvider router={router} />
-          <BrowserRouter>
-          <PersistentDrawerLeft>
-          </PersistentDrawerLeft>
-          </BrowserRouter>
+          <SnackbarProvider maxSnack={3}>
+              <RouterProvider router={router} />
+              <BrowserRouter>
+                  <PersistentDrawerLeft/>
+              </BrowserRouter>
+          </SnackbarProvider>
       </CookiesProvider>
   </React.StrictMode>,
 )
