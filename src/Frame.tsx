@@ -17,23 +17,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LinkIcon from '@mui/icons-material/Link';
-<<<<<<< HEAD
-import {useNavigate} from "react-router-dom";
-import {Link} from "@mui/material";
-import { Link as RouterLink } from 'react-router-dom';
-=======
->>>>>>> d7e00db (Removed Error handling file)
+import {useCookies} from "react-cookie";
 
 const drawerWidth = 240;
 
 const LinksBlock = (props: { names: {text: string, route: string}[] }) =>  <>
         <Divider/>
         <List>
-<<<<<<< HEAD
-            {props.names.map((v, index) => (
-=======
             {props.names.map((v) => (
->>>>>>> d7e00db (Removed Error handling file)
                 <ListItem key={v.text} disablePadding>
                     <a href={v.route}>
                         <ListItemButton>
@@ -97,12 +88,9 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
 }));
 
-<<<<<<< HEAD
-export default function PersistentDrawerLeft(props: { children: any; }) {
-=======
 export default function PersistentDrawerLeft() {
->>>>>>> d7e00db (Removed Error handling file)
     const theme = useTheme();
+    const [cookies] = useCookies();
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -150,24 +138,20 @@ export default function PersistentDrawerLeft() {
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
                 </DrawerHeader>
-                <LinksBlock names={[
+                {cookies["roles"]?.includes("Student") && <LinksBlock names={[
                     {text: "Exams", route: "/student/exams"}
-                ]}/>
-                <LinksBlock names={[
+                ]}/>}
+                {cookies["roles"]?.includes("Teacher") && <LinksBlock names={[
                     {text: "Exams", route: "/teacher/exams"}
-                ]}/>
-                <LinksBlock names={[
+                ]}/>}
+                {cookies["roles"]?.includes("Admin") && <LinksBlock names={[
                     {text: "Students", route: "/admin/students"},
                     {text: "Teachers", route: "/admin/teachers"},
                     {text: "Courses", route: "/admin/courses"},
-                ]}/>
+                ]}/>}
             </Drawer>
             <Main open={open}>
                 <DrawerHeader/>
-<<<<<<< HEAD
-                {props.children}
-=======
->>>>>>> d7e00db (Removed Error handling file)
             </Main>
         </Box>
     );

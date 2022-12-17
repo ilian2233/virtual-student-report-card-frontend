@@ -9,7 +9,10 @@ const baseURL = "http://localhost:8080";
 
 export const login = (email: string, password: string, setCookie: (name: string, value: any, options?: (CookieSetOptions)) => void, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
     printResult(axios.post(baseURL+"/login", {Email: email, Password: password}))
-        .then((r) => setCookie("token", r.data.Token, {expires: moment(new Date()).add(30, 'm').toDate()}))
+        .then((r) => {
+            setCookie("token", r.data.Token, {expires: moment(new Date()).add(30, 'm').toDate()})
+            setCookie("roles", JSON.parse(atob(r.data.Token.split('.')[1]))["roles"])
+        })
         .catch(error => {
             console.error(error);
         });
