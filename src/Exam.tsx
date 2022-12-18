@@ -1,15 +1,17 @@
 import React from 'react'
 import {
-    Autocomplete, Button,
+    Autocomplete,
+    Button,
     CircularProgress,
-    Grid,
     Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow, TextField
+    TableRow,
+    TextField,
+    Typography
 } from "@mui/material";
 import {getCourses, getExams, getStudentEmails, saveExam} from "./axiosRequests";
 import {useCookies} from "react-cookie";
@@ -18,13 +20,13 @@ import {useSnackbar} from "notistack";
 
 export type exam = {
     StudentName: string;
-    CourseName: string ;
-    Points :number;
+    CourseName: string;
+    Points: number;
 }
 
 export const GetStudentExams = () => {
     const [cookies] = useCookies();
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const [exams, setExams] = React.useState<exam[]>([]);
 
@@ -32,40 +34,38 @@ export const GetStudentExams = () => {
         getExams(setExams, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
-    console.log(exams)
-
-    return <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-            <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell align="right">Student&nbsp;Name</TableCell>
-                <TableCell align="right">Course&nbsp;Name</TableCell>
-                <TableCell align="right">Points</TableCell>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {exams.length <1?
-                <CircularProgress />:
-                exams.map((exam,index) => (
-                <TableRow
-                    key={index}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                    <TableCell align="right">{exam.StudentName}</TableCell>
-                    <TableCell align="right">{exam.CourseName}</TableCell>
-                    <TableCell align="right">{exam.Points}</TableCell>
+    //TODO: Fix display when drawer is open
+    return <TableContainer sx={{display: "flex", justifyContent: "center"}} component={Paper}>
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell>Student&nbsp;Name</TableCell>
+                    <TableCell>Course&nbsp;Name</TableCell>
+                    <TableCell>Points</TableCell>
                 </TableRow>
-            ))}
-        </TableBody>
-    </Table>
-</TableContainer>;
+            </TableHead>
+            <TableBody>
+                {exams.length < 1 ?
+                    <CircularProgress/> :
+                    exams.map((exam, index) => (
+                        <TableRow
+                            key={index}
+                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                        >
+                            <TableCell>{exam.StudentName}</TableCell>
+                            <TableCell>{exam.CourseName}</TableCell>
+                            <TableCell>{exam.Points}</TableCell>
+                        </TableRow>
+                    ))}
+            </TableBody>
+        </Table>
+    </TableContainer>;
 }
 
 //TODO: Add clear form after submit checkbox
 export const CreateExams = () => {
     const [cookies] = useCookies();
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const [courseName, setCourseName] = React.useState<string>("");
     const [studentEmail, setStudentEmail] = React.useState<string>("");
@@ -84,44 +84,53 @@ export const CreateExams = () => {
         saveExam(courseName, studentEmail, points, cookies["token"], requestResult(enqueueSnackbar))
     }
 
-    return (studentEmailsList.length <1 || courseList.length <1)?
-        <CircularProgress />:
-        <Grid container alignItems="center" direction="column">
-            <Grid item>
-                <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={studentEmailsList}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} error={(studentEmail=="")} label="Student email" />}
-                    inputValue={studentEmail}
-                    onInputChange={(_, newInputValue) => setStudentEmail(newInputValue)}
-                />
-            </Grid>
-            <Grid item>
-                <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={courseList}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} error={(courseName=="")} label="Course" />}
-                    inputValue={courseName}
-                    onInputChange={(_, newInputValue) => setCourseName(newInputValue)}
-                />
-            </Grid>
-            <Grid item>
-                <TextField
-                    error={(points > 100 || points < 0)}
-                    id="points"
-                    name="points"
-                    label="Points"
-                    type="number"
-                    value={points}
-                    onChange={ (e) => setPoints(parseInt(e.target.value))}
-                />
-            </Grid>
+    return (studentEmailsList.length < 1 || courseList.length < 1) ?
+        <CircularProgress/> :
+        <Paper
+            sx={{
+                width: 'fit-content',
+                mx: 'auto', // margin left & right
+                my: 4, // margin top & botom
+                py: 3, // padding top & bottom
+                px: 2, // padding left & right
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                borderRadius: 'sm',
+                boxShadow: 'md',
+            }}
+            variant="outlined"
+        >
+            <Typography component="h1"><b>Create new exam:</b></Typography>
+            <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={studentEmailsList}
+                sx={{width: 300}}
+                renderInput={(params) => <TextField {...params} error={(studentEmail == "")} label="Student email"/>}
+                inputValue={studentEmail}
+                onInputChange={(_, newInputValue) => setStudentEmail(newInputValue)}
+            />
+            <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={courseList}
+                sx={{width: 300}}
+                renderInput={(params) => <TextField {...params} error={(courseName == "")} label="Course"/>}
+                inputValue={courseName}
+                onInputChange={(_, newInputValue) => setCourseName(newInputValue)}
+            />
+            <TextField
+                error={(points > 100 || points < 0)}
+                id="points"
+                name="points"
+                label="Points"
+                type="number"
+                value={points}
+                onChange={(e) => setPoints(parseInt(e.target.value))}
+            />
             <Button onClick={handleSubmit}>
                 Submit
             </Button>
-        </Grid>;
+        </Paper>;
 }

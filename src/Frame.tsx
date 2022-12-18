@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LinkIcon from '@mui/icons-material/Link';
 import {useCookies} from "react-cookie";
+import {Outlet} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -150,7 +151,7 @@ export default function PersistentDrawerLeft() {
                     {text: "Courses", route: "/admin/courses"},
                 ]}/>}
             </Drawer>
-            <Main open={open}>
+            <Main open={open} sx={{justifyContent: "center", width:"100vw"}}>
                 <DrawerHeader/>
             </Main>
         </Box>
