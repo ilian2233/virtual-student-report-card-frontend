@@ -35,7 +35,7 @@ export const getExams = (setExams:  React.Dispatch<React.SetStateAction<exam[]>>
         });
 };
 
-export const getStudentEmails = (setStudents:  React.Dispatch<React.SetStateAction<string[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+export const getStudentFacultyNumbers = (setStudents:  React.Dispatch<React.SetStateAction<string[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
 
     const config = {
         headers:{
@@ -69,7 +69,7 @@ export const getCourses = (setCourses:  React.Dispatch<React.SetStateAction<stri
         });
 };
 
-export const saveExam = (courseName: string, studentEmail: string, points: number, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+export const saveExam = (courseName: string, studentFacultyNumber: string, points: number, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
 
     const config = {
         headers:{
@@ -77,7 +77,7 @@ export const saveExam = (courseName: string, studentEmail: string, points: numbe
         }
     };
 
-    printResult(axios.post(baseURL+"/teacher/exams", {CourseName: courseName, StudentEmail: studentEmail, Points: points}, config))
+    printResult(axios.post(baseURL+"/teacher/exams", {CourseName: courseName, StudentFacultyNumber: studentFacultyNumber, Points: points}, config))
         .then(() => {
             console.log("Success");
         })

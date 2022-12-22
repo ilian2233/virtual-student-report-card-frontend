@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {getCourses, getExams, getStudentEmails, saveExam} from "./axiosRequests";
+import {getCourses, getExams, getStudentFacultyNumbers, saveExam} from "./axiosRequests";
 import {useCookies} from "react-cookie";
 import {requestResult} from "./main";
 import {useSnackbar} from "notistack";
@@ -68,23 +68,23 @@ export const CreateExams = () => {
     const {enqueueSnackbar} = useSnackbar();
 
     const [courseName, setCourseName] = React.useState<string>("");
-    const [studentEmail, setStudentEmail] = React.useState<string>("");
+    const [studentFacultyNumber, setStudentFacultyNumber] = React.useState<string>("");
     const [points, setPoints] = React.useState<number>(0);
 
-    const [studentEmailsList, setStudentEmailsList] = React.useState<string[]>([]);
+    const [studentFacultyNumbers, setStudentFacultyNumbers] = React.useState<string[]>([]);
     const [courseList, setCourseList] = React.useState<string[]>([]);
     React.useEffect(() => {
-        getStudentEmails(setStudentEmailsList, cookies["token"], requestResult(enqueueSnackbar))
+        getStudentFacultyNumbers(setStudentFacultyNumbers, cookies["token"], requestResult(enqueueSnackbar))
         getCourses(setCourseList, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
-        saveExam(courseName, studentEmail, points, cookies["token"], requestResult(enqueueSnackbar))
+        saveExam(courseName, studentFacultyNumber, points, cookies["token"], requestResult(enqueueSnackbar))
     }
 
-    return (studentEmailsList.length < 1 || courseList.length < 1) ?
+    return (studentFacultyNumbers.length < 1 || courseList.length < 1) ?
         <CircularProgress/> :
         <Paper
             sx={{
@@ -105,11 +105,11 @@ export const CreateExams = () => {
             <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={studentEmailsList}
+                options={studentFacultyNumbers}
                 sx={{width: 300}}
-                renderInput={(params) => <TextField {...params} error={(studentEmail == "")} label="Student email"/>}
-                inputValue={studentEmail}
-                onInputChange={(_, newInputValue) => setStudentEmail(newInputValue)}
+                renderInput={(params) => <TextField {...params} error={(studentFacultyNumber == "")} label="Student faculty number"/>}
+                inputValue={studentFacultyNumber}
+                onInputChange={(_, newInputValue) => setStudentFacultyNumber(newInputValue)}
             />
             <Autocomplete
                 disablePortal
