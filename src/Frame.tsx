@@ -18,7 +18,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LinkIcon from '@mui/icons-material/Link';
 import {useCookies} from "react-cookie";
-import {Outlet} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -116,9 +115,6 @@ export default function PersistentDrawerLeft() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Persistent drawer
-                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
