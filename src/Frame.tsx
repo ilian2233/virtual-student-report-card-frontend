@@ -6,7 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,26 +17,27 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LinkIcon from '@mui/icons-material/Link';
 import {useCookies} from "react-cookie";
+import {Button} from "@mui/material";
 
 const drawerWidth = 240;
 
-const LinksBlock = (props: { names: {text: string, route: string}[] }) =>  <>
-        <Divider/>
-        <List>
-            {props.names.map((v) => (
-                <ListItem key={v.text} disablePadding>
-                    <a href={v.route}>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <LinkIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary={v.text}/>
-                        </ListItemButton>
-                    </a>
-                </ListItem>
-            ))}
-        </List>
-    </>
+const LinksBlock = (props: { names: { text: string, route: string }[] }) => <>
+    <Divider/>
+    <List>
+        {props.names.map((v) => (
+            <ListItem key={v.text} disablePadding>
+                <a href={v.route}>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <LinkIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={v.text}/>
+                    </ListItemButton>
+                </a>
+            </ListItem>
+        ))}
+    </List>
+</>
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
     open?: boolean;
@@ -88,6 +88,23 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
 }));
 
+const LoginLogoutButton = () => {
+    const [cookies, _, removeCookie] = useCookies();
+
+    const logout = () => {
+        removeCookie("token");
+        removeCookie("roles");
+    }
+
+    return <a href="/login">
+        {
+            cookies["token"] ?
+                <Button onClick={logout} variant="contained">Logout</Button> :
+                <Button variant="contained">Login</Button>
+        }
+    </a>
+}
+
 export default function PersistentDrawerLeft() {
     const theme = useTheme();
     const [cookies] = useCookies();
@@ -115,6 +132,8 @@ export default function PersistentDrawerLeft() {
                     >
                         <MenuIcon/>
                     </IconButton>
+                    <Box sx={{width: '100%'}}/>
+                    <LoginLogoutButton/>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -147,7 +166,7 @@ export default function PersistentDrawerLeft() {
                     {text: "Courses", route: "/admin/courses"},
                 ]}/>}
             </Drawer>
-            <Main open={open} sx={{justifyContent: "center", width:"100vw"}}>
+            <Main open={open} sx={{justifyContent: "center", width: "100vw"}}>
                 <DrawerHeader/>
             </Main>
         </Box>
