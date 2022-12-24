@@ -6,7 +6,7 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import App from "./App";
+import LandingPage from "./Landing-page";
 import {GetStudentExams, CreateExams} from "./Exam";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
@@ -30,7 +30,7 @@ export const requestResult = (alertHandler:  (message: SnackbarMessage, options?
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App/>,
+        element: <LandingPage/>,
         errorElement: <ErrorPage/>,
     },
     {
