@@ -80,7 +80,6 @@ export const CreateExams = () => {
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-
         saveExam(courseName, studentFacultyNumber, points, cookies["token"], requestResult(enqueueSnackbar))
     }
 

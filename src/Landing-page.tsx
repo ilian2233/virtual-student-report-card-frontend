@@ -10,7 +10,7 @@ const CardDisplay = (props: { title: string, cards: { cardTitle: string, cardBod
     spacing={3}
 >
     <Grid item xs={12}>
-        <Paper sx={{width: "80vh"}}>
+        <Paper sx={{width: "80vw"}}>
             <Typography gutterBottom variant="h4" component="div">
                 {props.title}
             </Typography>
@@ -50,7 +50,7 @@ const LandingPage = () => <Grid
         direction="column"
         justifyContent="center"
         alignItems="center"
-        width="90vh"
+        width="90vw"
     >
         <CardDisplay title="News" cards={[
             {

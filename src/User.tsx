@@ -1,9 +1,10 @@
 import {useCookies} from "react-cookie";
 import React from "react";
-import {saveUser} from "./axiosRequests";
-import {Button, Paper, TextField, Typography} from "@mui/material";
+import {getUsers, saveUser} from "./axiosRequests";
+import {Box, Button, Modal, Paper, TextField, Typography} from "@mui/material";
 import {useSnackbar} from "notistack";
 import {requestResult} from "./main";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 
 export type roles = "student" | "teacher" | "admin"
 export const nameRegex = /^([a-zA-Z]\s?)*$/
@@ -70,4 +71,63 @@ export const CreateUser = (props: { role: roles }) => {
             Submit
         </Button>
     </Paper>
+}
+
+const studentExclusiveColumns: GridColDef[] = [
+    {field: 'FacultyNumber', headerName: 'Faculty Number', type: 'number', width: 130},
+];
+
+const columns: GridColDef[] = [
+    {field: 'Name', headerName: 'Name', width: 130},
+    {field: 'Email', headerName: 'Email', width: 130},
+    {field: 'Phone', headerName: 'Phone', type: 'number', width: 130},
+    {
+        field: 'action',
+        headerName: 'Archive',
+        sortable: false,
+        width: 130,
+        renderCell: (params) => {
+            const onClick = (e: { stopPropagation: () => void; }) => {
+                e.stopPropagation(); // don't select this row after clicking
+                return alert(JSON.stringify("thisRow", null, 4));
+            };
+
+            return <Button onClick={onClick}>Archive</Button>;
+        },
+    },
+];
+
+export const UserTable = (props: { role: roles }) => {
+    const [cookies] = useCookies();
+    const {enqueueSnackbar} = useSnackbar();
+
+    const [rows, setRows] = React.useState<[]>([]);
+
+    React.useEffect(() => {
+        getUsers(setRows, cookies["token"], props.role, requestResult(enqueueSnackbar))
+    }, []);
+
+    return <DataGrid
+        rows={rows}
+        columns={props.role !== "student" ? columns : [...studentExclusiveColumns, ...columns]}
+        getRowId={(e: { Email: string }) => e.Email}
+    />
+}
+
+export const UserPage = (props: { role: roles }) => {
+    const [open, setOpen] = React.useState(false);
+    return <Box display="flex" flexDirection="column" height="85vh">
+        <Box display="flex" justifyContent="flex-end" margin="5vw">
+            <Button variant="contained" onClick={() => setOpen(true)}>New</Button>
+        </Box>
+        <UserTable role={props.role}/>
+        <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <CreateUser role={props.role}/>
+        </Modal>
+    </Box>
 }
