@@ -10,7 +10,7 @@ import LandingPage from "./Landing-page";
 import {GetStudentExams, CreateExams} from "./Exam";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
-import {CreateUser} from "./User";
+import {CreateUser, UserPage} from "./User";
 import {CreateCourse} from "./Course";
 import PersistentDrawerLeft from "./Frame";
 import {OptionsObject, SnackbarKey, SnackbarMessage, SnackbarProvider} from "notistack";
@@ -50,12 +50,12 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin/students",
-        element: <CreateUser role="student"/>,
+        element: <UserPage role="student"/>,
         errorElement: <ErrorPage/>,
     },
     {
         path: "/admin/teachers",
-        element: <CreateUser role="teacher"/>,
+        element: <UserPage role="teacher"/>,
         errorElement: <ErrorPage/>,
     },
     {

@@ -1,5 +1,5 @@
 import {Autocomplete, Button, CircularProgress, Paper, TextField, Typography} from "@mui/material";
-import {getTeachers, saveCourse} from "./axiosRequests";
+import {getTeacherEmails, saveCourse} from "./axiosRequests";
 import React from "react";
 import {useCookies} from "react-cookie";
 import {nameRegex} from "./User";
@@ -15,7 +15,7 @@ export const CreateCourse = () => {
 
     const [teachers, setTeachers] = React.useState<string[]>([]);
     React.useEffect(() => {
-        getTeachers(setTeachers, cookies["token"], requestResult(enqueueSnackbar))
+        getTeacherEmails(setTeachers, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
