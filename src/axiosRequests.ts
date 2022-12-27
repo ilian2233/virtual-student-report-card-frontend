@@ -4,6 +4,7 @@ import {exam} from "./Exam";
 import {CookieSetOptions} from "universal-cookie";
 import moment from "moment";
 import {roles} from "./User";
+import {GridRowId} from "@mui/x-data-grid";
 
 const baseURL = "http://localhost:8080";
 
@@ -203,6 +204,27 @@ export const getAdminCourses = (setCourses: React.Dispatch<React.SetStateAction<
     printResult(axios.get(baseURL + "/admin/courses", config))
         .then((response: { data: [] }) => {
             setCourses(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const archiveUser = (userEmail: GridRowId,role:string, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+
+    const config = {
+        params: {
+            role: role,
+            email: userEmail
+        },
+        headers: {
+            Authorization: token,
+        }
+    };
+
+    printResult(axios.delete(baseURL + "/admin/users", config))
+        .then((response: { data: [] }) => {
+            console.log(response.data);
         })
         .catch(error => {
             console.error(error);

@@ -1,10 +1,11 @@
 import {useCookies} from "react-cookie";
 import React from "react";
-import {getUsers, saveUser} from "./axiosRequests";
+import {archiveUser, getUsers, saveUser} from "./axiosRequests";
 import {Box, Button, Modal, Paper, TextField, Typography} from "@mui/material";
 import {useSnackbar} from "notistack";
 import {requestResult} from "./main";
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
+import {AxiosPromise, AxiosResponse} from "axios";
 
 export type roles = "student" | "teacher" | "admin"
 export const nameRegex = /^([a-zA-Z]\s?)*$/
@@ -73,29 +74,41 @@ export const CreateUser = (props: { role: roles }) => {
     </Paper>
 }
 
-const studentExclusiveColumns: GridColDef[] = [
-    {field: 'FacultyNumber', headerName: 'Faculty Number', type: 'number', width: 130},
-];
+const getColumns = (
+    token: string,
+    printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>,
+    role: string,
+): GridColDef[] => {
 
-const columns: GridColDef[] = [
-    {field: 'Name', headerName: 'Name', width: 130},
-    {field: 'Email', headerName: 'Email', width: 130},
-    {field: 'Phone', headerName: 'Phone', type: 'number', width: 130},
-    {
-        field: 'action',
-        headerName: 'Archive',
-        sortable: false,
-        width: 130,
-        renderCell: (params) => {
-            const onClick = (e: { stopPropagation: () => void; }) => {
-                e.stopPropagation(); // don't select this row after clicking
-                return alert(JSON.stringify("thisRow", null, 4));
-            };
+    const studentExclusiveColumns: GridColDef[] = [
+        {field: 'FacultyNumber', headerName: 'Faculty Number', type: 'number', width: 130},
+    ];
 
-            return <Button onClick={onClick}>Archive</Button>;
+    const columns: GridColDef[] = [
+        {field: 'Name', headerName: 'Name', width: 130},
+        {field: 'Email', headerName: 'Email', width: 130},
+        {field: 'Phone', headerName: 'Phone', type: 'number', width: 130},
+        {
+            field: 'action',
+            headerName: 'Archive',
+            sortable: false,
+            width: 130,
+            renderCell: (params) => {
+                const onClick = (e: { stopPropagation: () => void; }) => {
+                    e.stopPropagation(); // don't select this row after clicking
+                    if (confirm("Are you the sure?")) {
+                        archiveUser(params.id, role, token, printResult)
+                    }
+                    return
+                };
+
+                return <Button onClick={onClick}>Archive</Button>;
+            },
         },
-    },
-];
+    ];
+
+    return role !== "student" ? columns : [...studentExclusiveColumns, ...columns]
+}
 
 export const UserTable = (props: { role: roles }) => {
     const [cookies] = useCookies();
@@ -109,7 +122,7 @@ export const UserTable = (props: { role: roles }) => {
 
     return <DataGrid
         rows={rows}
-        columns={props.role !== "student" ? columns : [...studentExclusiveColumns, ...columns]}
+        columns={getColumns(cookies["token"], requestResult(enqueueSnackbar), props.role)}
         getRowId={(e: { Email: string }) => e.Email}
     />
 }
