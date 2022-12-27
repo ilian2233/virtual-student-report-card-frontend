@@ -1,8 +1,8 @@
 import React from 'react'
 import {
-    Autocomplete,
+    Autocomplete, Box,
     Button,
-    CircularProgress,
+    CircularProgress, Modal,
     Paper,
     Table,
     TableBody,
@@ -13,10 +13,18 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {getTeacherCourses, getExams, getStudentFacultyNumbers, saveExam} from "./axiosRequests";
+import {
+    getTeacherCourses,
+    getTeacherExams,
+    getStudentFacultyNumbers,
+    saveExam,
+    getAdminCourses,
+    getStudentExams
+} from "./axiosRequests";
 import {useCookies} from "react-cookie";
 import {requestResult} from "./main";
 import {useSnackbar} from "notistack";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 
 export type exam = {
     StudentName: string;
@@ -31,7 +39,7 @@ export const GetStudentExams = () => {
     const [exams, setExams] = React.useState<exam[]>([]);
 
     React.useEffect(() => {
-        getExams(setExams, cookies["token"], requestResult(enqueueSnackbar))
+        getStudentExams(setExams, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     //TODO: Fix display when drawer is open
@@ -132,4 +140,46 @@ export const CreateExams = () => {
                 Submit
             </Button>
         </Paper>;
+}
+
+
+const columns: GridColDef[] = [
+    {field: 'StudentFacultyNumber', headerName: 'Student Faculty Number', width: 300},
+    {field: 'CourseName', headerName: 'Course Name', width: 300},
+    {field: 'Points', headerName: 'Points', width: 130},
+];
+
+export const ExamsTable = () => {
+    const [cookies] = useCookies();
+    const {enqueueSnackbar} = useSnackbar();
+
+    const [rows, setRows] = React.useState<[]>([]);
+
+    React.useEffect(() => {
+        getTeacherExams(setRows, cookies["token"], requestResult(enqueueSnackbar))
+    }, []);
+
+    return <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={(e: { StudentFacultyNumber: string,CourseName: string,Points: string, }) => e.StudentFacultyNumber+e.CourseName+e.Points}
+    />
+}
+
+export const ExamsPage = () => {
+    const [open, setOpen] = React.useState(false);
+    return <Box display="flex" flexDirection="column" height="85vh">
+        <Box display="flex" justifyContent="flex-end" margin="5vw">
+            <Button variant="contained" onClick={() => setOpen(true)}>New</Button>
+        </Box>
+        <ExamsTable/>
+        <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <CreateExams/>
+        </Modal>
+    </Box>
 }
