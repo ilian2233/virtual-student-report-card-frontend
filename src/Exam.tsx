@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {getCourses, getExams, getStudentFacultyNumbers, saveExam} from "./axiosRequests";
+import {getTeacherCourses, getExams, getStudentFacultyNumbers, saveExam} from "./axiosRequests";
 import {useCookies} from "react-cookie";
 import {requestResult} from "./main";
 import {useSnackbar} from "notistack";
@@ -75,7 +75,7 @@ export const CreateExams = () => {
     const [courseList, setCourseList] = React.useState<string[]>([]);
     React.useEffect(() => {
         getStudentFacultyNumbers(setStudentFacultyNumbers, cookies["token"], requestResult(enqueueSnackbar))
-        getCourses(setCourseList, cookies["token"], requestResult(enqueueSnackbar))
+        getTeacherCourses(setCourseList, cookies["token"], requestResult(enqueueSnackbar))
     }, []);
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
