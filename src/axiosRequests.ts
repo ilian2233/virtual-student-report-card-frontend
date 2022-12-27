@@ -52,7 +52,7 @@ export const getStudentFacultyNumbers = (setStudents: React.Dispatch<React.SetSt
         });
 };
 
-export const getCourses = (setCourses: React.Dispatch<React.SetStateAction<string[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+export const getTeacherCourses = (setCourses: React.Dispatch<React.SetStateAction<string[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
 
     const config = {
         headers: {
@@ -154,7 +154,6 @@ export const saveCourse = (courseName: string, teacherEmail: string, token: stri
         });
 }
 
-
 export const getUsers = (setUsers: React.Dispatch<React.SetStateAction<[]>>, token: string, wantedRole: roles, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
 
     const config = {
@@ -169,6 +168,23 @@ export const getUsers = (setUsers: React.Dispatch<React.SetStateAction<[]>>, tok
     printResult(axios.get(baseURL + "/admin/users", config))
         .then((response: { data: [] }) => {
             setUsers(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const getAdminCourses = (setCourses: React.Dispatch<React.SetStateAction<[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+
+    const config = {
+        headers: {
+            Authorization: token,
+        }
+    };
+
+    printResult(axios.get(baseURL + "/admin/courses", config))
+        .then((response: { data: [] }) => {
+            setCourses(response.data);
         })
         .catch(error => {
             console.error(error);

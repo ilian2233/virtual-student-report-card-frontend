@@ -11,7 +11,7 @@ import {GetStudentExams, CreateExams} from "./Exam";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
 import {CreateUser, UserPage} from "./User";
-import {CreateCourse} from "./Course";
+import {CoursePage, CreateCourse} from "./Course";
 import PersistentDrawerLeft from "./Frame";
 import {OptionsObject, SnackbarKey, SnackbarMessage, SnackbarProvider} from "notistack";
 import {AxiosPromise} from "axios";
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin/courses",
-        element: <CreateCourse/>,
+        element: <CoursePage/>,
         errorElement: <ErrorPage/>,
     }
 ]);

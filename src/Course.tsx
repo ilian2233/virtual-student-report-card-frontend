@@ -1,10 +1,11 @@
-import {Autocomplete, Button, CircularProgress, Paper, TextField, Typography} from "@mui/material";
-import {getTeacherEmails, saveCourse} from "./axiosRequests";
+import {Autocomplete, Box, Button, CircularProgress, Modal, Paper, TextField, Typography} from "@mui/material";
+import {getAdminCourses, getTeacherCourses, getTeacherEmails, getUsers, saveCourse} from "./axiosRequests";
 import React from "react";
 import {useCookies} from "react-cookie";
-import {nameRegex} from "./User";
+import {CreateUser, nameRegex, roles, UserTable} from "./User";
 import {useSnackbar} from "notistack";
 import {requestResult} from "./main";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 
 export const CreateCourse = () => {
     const [cookies] = useCookies();
@@ -63,4 +64,59 @@ export const CreateCourse = () => {
                 Submit
             </Button>
         </Paper>
+}
+
+
+const columns: GridColDef[] = [
+    {field: 'TeacherName', headerName: 'Teacher Name', width: 130},
+    {field: 'Name', headerName: 'Course Name', width: 300},
+    {
+        field: 'action',
+        headerName: 'Archive',
+        sortable: false,
+        width: 130,
+        renderCell: (params) => {
+            const onClick = (e: { stopPropagation: () => void; }) => {
+                e.stopPropagation(); // don't select this row after clicking
+                return alert(JSON.stringify("thisRow", null, 4));
+            };
+
+            return <Button onClick={onClick}>Archive</Button>;
+        },
+    },
+];
+
+export const CourseTable = () => {
+    const [cookies] = useCookies();
+    const {enqueueSnackbar} = useSnackbar();
+
+    const [rows, setRows] = React.useState<[]>([]);
+
+    React.useEffect(() => {
+        getAdminCourses(setRows, cookies["token"], requestResult(enqueueSnackbar))
+    }, []);
+
+    return <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={(e: { Name: string }) => e.Name}
+    />
+}
+
+export const CoursePage = () => {
+    const [open, setOpen] = React.useState(false);
+    return <Box display="flex" flexDirection="column" height="85vh">
+        <Box display="flex" justifyContent="flex-end" margin="5vw">
+            <Button variant="contained" onClick={() => setOpen(true)}>New</Button>
+        </Box>
+        <CourseTable/>
+        <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <CreateCourse/>
+        </Modal>
+    </Box>
 }
