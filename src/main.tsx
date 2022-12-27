@@ -7,7 +7,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import LandingPage from "./Landing-page";
-import {GetStudentExams, CreateExams} from "./Exam";
+import {GetStudentExams, CreateExams, ExamsPage} from "./Exam";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
 import {CreateUser, UserPage} from "./User";
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/teacher/exams",
-        element: <CreateExams/>,
+        element: <ExamsPage/>,
         errorElement: <ErrorPage/>,
     },
     {

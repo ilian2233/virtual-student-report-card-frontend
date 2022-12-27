@@ -18,7 +18,7 @@ export const login = (email: string, password: string, setCookie: (name: string,
         });
 }
 
-export const getExams = (setExams: React.Dispatch<React.SetStateAction<exam[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+export const getStudentExams = (setExams: React.Dispatch<React.SetStateAction<exam[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
 
     const config = {
         headers: {
@@ -28,6 +28,24 @@ export const getExams = (setExams: React.Dispatch<React.SetStateAction<exam[]>>,
 
     printResult(axios.get(baseURL + "/student/exams", config))
         .then((response: { data: exam[] }) => {
+            setExams(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+};
+
+
+export const getTeacherExams = (setExams: React.Dispatch<React.SetStateAction<[]>>, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+
+    const config = {
+        headers: {
+            Authorization: token,
+        }
+    };
+
+    printResult(axios.get(baseURL + "/teacher/exams", config))
+        .then((response: { data: [] }) => {
             setExams(response.data);
         })
         .catch(error => {
