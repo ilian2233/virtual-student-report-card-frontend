@@ -230,3 +230,24 @@ export const archiveUser = (userEmail: GridRowId,role:string, token: string, pri
             console.error(error);
         });
 }
+
+
+export const archiveCourse = (courseName: GridRowId, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+
+    const config = {
+        params: {
+            CourseName: courseName
+        },
+        headers: {
+            Authorization: token,
+        }
+    };
+
+    printResult(axios.delete(baseURL + "/admin/courses", config))
+        .then((response: { data: [] }) => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+};
