@@ -7,15 +7,16 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import LandingPage from "./Landing-page";
-import {GetStudentExams, CreateExams, ExamsPage} from "./Exam";
+import {GetStudentExams, ExamsPage} from "./Exam";
 import {Login} from "./Login";
 import {CookiesProvider} from "react-cookie";
-import {CreateUser, UserPage} from "./User";
-import {CoursePage, CreateCourse} from "./Course";
+import {UserPage} from "./User";
+import {CoursePage} from "./Course";
 import PersistentDrawerLeft from "./Frame";
 import {OptionsObject, SnackbarKey, SnackbarMessage, SnackbarProvider} from "notistack";
 import {AxiosPromise} from "axios";
 import ErrorPage from "./Error-page";
+import {ChangePassword, ForgottenPassword} from "./Password-reset-forgotten";
 
 export const requestResult = (alertHandler:  (message: SnackbarMessage, options?: (OptionsObject | undefined)) => SnackbarKey) => (request: Promise<AxiosPromise>) => request
     .then(r=>{
@@ -36,6 +37,16 @@ const router = createBrowserRouter([
     {
         path: "/login",
         element: <Login/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/change",
+        element: <ChangePassword/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/forgotten",
+        element: <ForgottenPassword/>,
         errorElement: <ErrorPage/>,
     },
     {

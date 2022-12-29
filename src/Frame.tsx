@@ -165,6 +165,10 @@ export default function PersistentDrawerLeft() {
                     {text: "Teachers", route: "/admin/teachers"},
                     {text: "Courses", route: "/admin/courses"},
                 ]}/>}
+                {cookies["token"] ?
+                    <LinksBlock names={[{text: "Change Password", route: "/change"}]}/> :
+                    <LinksBlock names={[{text: "Forgotten Password", route: "/forgotten"}]}/>
+                }
             </Drawer>
             <Main open={open} sx={{justifyContent: "center", width: "100vw"}}>
                 <DrawerHeader/>

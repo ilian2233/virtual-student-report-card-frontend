@@ -58,6 +58,7 @@ export const Login = () => {
             value={password}
             onChange={ (e) => setPassword(e.target.value)}
         />
-        <Button sx={{ mt: 1 /* margin top */ }} onClick={handleSubmit}>Log in</Button>
+        <Button sx={{ mt: 1}} onClick={handleSubmit}>Log in</Button>
+        {/*<a href={"/forgotten"} style={{fontSize: "x-small", justifyContent: "center"}}>forgotten password?</a>*/}
     </Paper>
 }
