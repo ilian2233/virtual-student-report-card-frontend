@@ -1,11 +1,12 @@
 import {Autocomplete, Box, Button, CircularProgress, Modal, Paper, TextField, Typography} from "@mui/material";
-import {getAdminCourses, getTeacherCourses, getTeacherEmails, getUsers, saveCourse} from "./axiosRequests";
+import {archiveCourse, archiveUser, getAdminCourses, getTeacherEmails, saveCourse} from "./axiosRequests";
 import React from "react";
 import {useCookies} from "react-cookie";
-import {CreateUser, nameRegex, roles, UserTable} from "./User";
+import {nameRegex} from "./User";
 import {useSnackbar} from "notistack";
 import {requestResult} from "./main";
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
+import {AxiosPromise, AxiosResponse} from "axios/index";
 
 export const CreateCourse = () => {
     const [cookies] = useCookies();
@@ -66,25 +67,32 @@ export const CreateCourse = () => {
         </Paper>
 }
 
+const getColumns = (
+    token: string,
+    printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>,
+): GridColDef[] => {
+    return [
+        {field: 'TeacherName', headerName: 'Teacher Name', width: 130},
+        {field: 'Name', headerName: 'Course Name', width: 300},
+        {
+            field: 'action',
+            headerName: 'Archive',
+            sortable: false,
+            width: 130,
+            renderCell: (params) => {
+                const onClick = (e: { stopPropagation: () => void; }) => {
+                    e.stopPropagation(); // don't select this row after clicking
+                    if (confirm("Are you the sure?")) {
+                        archiveCourse(params.id, token, printResult)
+                    }
+                    return
+                };
 
-const columns: GridColDef[] = [
-    {field: 'TeacherName', headerName: 'Teacher Name', width: 130},
-    {field: 'Name', headerName: 'Course Name', width: 300},
-    {
-        field: 'action',
-        headerName: 'Archive',
-        sortable: false,
-        width: 130,
-        renderCell: (params) => {
-            const onClick = (e: { stopPropagation: () => void; }) => {
-                e.stopPropagation(); // don't select this row after clicking
-                return alert(JSON.stringify("thisRow", null, 4));
-            };
-
-            return <Button onClick={onClick}>Archive</Button>;
+                return <Button onClick={onClick}>Archive</Button>;
+            },
         },
-    },
-];
+    ]
+}
 
 export const CourseTable = () => {
     const [cookies] = useCookies();
@@ -98,7 +106,7 @@ export const CourseTable = () => {
 
     return <DataGrid
         rows={rows}
-        columns={columns}
+        columns={getColumns(cookies["token"], requestResult(enqueueSnackbar))}
         getRowId={(e: { Name: string }) => e.Name}
     />
 }
