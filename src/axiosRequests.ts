@@ -210,7 +210,7 @@ export const getAdminCourses = (setCourses: React.Dispatch<React.SetStateAction<
         });
 }
 
-export const archiveUser = (userEmail: GridRowId,role:string, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+export const archiveUser = (userEmail: GridRowId, role: string, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
 
     const config = {
         params: {
@@ -251,3 +251,40 @@ export const archiveCourse = (courseName: GridRowId, token: string, printResult:
             console.error(error);
         });
 };
+
+export const changePassword = (oldPassword: string, newPassword: string, token: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+
+    const config = {
+        headers: {
+            Authorization: token,
+        }
+    };
+
+    printResult(axios.post(baseURL + "/reset-password", {
+        OldPassword: oldPassword,
+        NewPassword: newPassword,
+    },config))
+        .then(() => {
+            console.log("Success");
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const forgottenPassword = (email: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+
+    const config = {
+        params: {
+            email: email
+        }
+    };
+
+    printResult(axios.post(baseURL + "/forgotten-password", config))
+        .then((response: { data: [] }) => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
