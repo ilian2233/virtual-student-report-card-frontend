@@ -16,7 +16,7 @@ import PersistentDrawerLeft from "./Frame";
 import {OptionsObject, SnackbarKey, SnackbarMessage, SnackbarProvider} from "notistack";
 import {AxiosPromise} from "axios";
 import ErrorPage from "./Error-page";
-import {ChangePassword, ForgottenPassword} from "./Password-reset-forgotten";
+import {ChangePassword, CreatePassword, ForgottenPassword} from "./Password-reset-forgotten";
 
 export const requestResult = (alertHandler:  (message: SnackbarMessage, options?: (OptionsObject | undefined)) => SnackbarKey) => (request: Promise<AxiosPromise>) => request
     .then(r=>{
@@ -42,6 +42,11 @@ const router = createBrowserRouter([
     {
         path: "/change",
         element: <ChangePassword/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/create",
+        element: <CreatePassword/>,
         errorElement: <ErrorPage/>,
     },
     {
