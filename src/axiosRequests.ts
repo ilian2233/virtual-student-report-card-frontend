@@ -263,7 +263,20 @@ export const changePassword = (oldPassword: string, newPassword: string, token: 
     printResult(axios.post(baseURL + "/reset-password", {
         OldPassword: oldPassword,
         NewPassword: newPassword,
-    },config))
+    }, config))
+        .then(() => {
+            console.log("Success");
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+export const createPassword = (code: string, password: string, printResult: (request: Promise<AxiosPromise>) => Promise<AxiosResponse<any>>) => {
+    printResult(axios.post(baseURL + "/create-password", {
+        Code: code,
+        Password: password,
+    }))
         .then(() => {
             console.log("Success");
         })
